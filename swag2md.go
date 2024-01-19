@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/sliveryou/swag2md/pkg/markdown"
 	"github.com/sliveryou/swag2md/pkg/parser"
 )
 
@@ -33,19 +34,13 @@ func main() {
 	}
 	defer f.Close()
 
-	_, err = f.WriteString(p.BuildTitle(*title))
+	out, err := markdown.Process("", []byte(p.Build(*title)), nil)
 	if err != nil {
 		log.Println(err)
 		return
 	}
 
-	_, err = f.WriteString(p.BuildOverview())
-	if err != nil {
-		log.Println(err)
-		return
-	}
-
-	_, err = f.WriteString(p.BuildDetail())
+	_, err = f.Write(out)
 	if err != nil {
 		log.Println(err)
 		return

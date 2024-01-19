@@ -18,6 +18,11 @@ const (
 	SchemaTypeArray   = "array"
 )
 
+const (
+	// ApplicationJSON 应用类型：json
+	ApplicationJSON = "application/json"
+)
+
 // Swagger swagger详情
 type Swagger struct {
 	BasePath    string                           `json:"basePath"`

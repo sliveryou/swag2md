@@ -25,6 +25,28 @@ const (
 	emsp              = "&emsp;"
 )
 
+var (
+	replacer = strings.NewReplacer(
+		" ", "-",
+		".", "",
+		"。", "",
+		",", "-",
+		"，", "-",
+		"/", "",
+		"(", "-",
+		")", "",
+		"[", "-",
+		"]", "",
+		"{", "-",
+		"}", "",
+		"（", "-",
+		"）", "",
+		"、", "-",
+		";", "-",
+		"；", "-",
+	)
+)
+
 // Parser Swagger解析器详情
 type Parser struct {
 	swagger   *types.Swagger
@@ -61,6 +83,11 @@ func NewParser(filePath string) (*Parser, error) {
 	}, nil
 }
 
+// Build 构建文档
+func (p *Parser) Build(title string) string {
+	return p.BuildTitle(title) + p.BuildOverview() + p.BuildDetail()
+}
+
 // BuildTitle 构建标题
 func (p *Parser) BuildTitle(title string) string {
 	return fmt.Sprintf("# %s\n", title)
@@ -79,7 +106,7 @@ func (p *Parser) BuildOverview() string {
 		if pathInfos, ok := p.pathGroup[key]; ok {
 			for _, pi := range pathInfos {
 				b.WriteString(fmt.Sprintf("| [%s](#%s) | %s | %s | %t |\n",
-					pi.Path, pi.Summary, pi.Summary, pi.Method, pi.NeedAuth))
+					pi.Path, replacer.Replace(pi.Summary), pi.Summary, pi.Method, pi.NeedAuth))
 			}
 		}
 	}
@@ -91,7 +118,6 @@ func (p *Parser) BuildOverview() string {
 func (p *Parser) BuildDetail() string {
 	b := &strings.Builder{}
 	b.WriteString("\n## 接口详情\n")
-	replacer := strings.NewReplacer(" ", "-", ".", "", "/", "")
 
 	for _, key := range p.keys {
 		i := strings.Index(key, " ")
@@ -103,7 +129,7 @@ func (p *Parser) BuildDetail() string {
 
 		if pathInfos, ok := p.pathGroup[key]; ok {
 			for _, pi := range pathInfos {
-				b.WriteString(fmt.Sprintf("\n### %s\n", pi.Summary))
+				b.WriteString(fmt.Sprintf("\n### %s\n", replacer.Replace(pi.Summary)))
 				b.WriteString(fmt.Sprintf("\n[返回概览](#%s)\n\n---\n", replacer.Replace(key)))
 				if pi.Method == methodGet {
 					b.WriteString(fmt.Sprintf("\n%s %s\n", pi.Method, pi.Path))
@@ -112,7 +138,6 @@ func (p *Parser) BuildDetail() string {
 				}
 				// 构建请求参数
 				p.buildParameters(b, pi)
-				b.WriteString(fmt.Sprintf("\n---\n\nContent-Type: %s\n", pi.Produce))
 				// 构建响应参数
 				p.buildResponses(b, pi)
 			}
@@ -196,10 +221,6 @@ func (p *Parser) buildResponses(b *strings.Builder, pi *types.PathInfo) {
 	if len(pi.Responses) > 0 {
 		eb := builder.NewExampleBuilder(pi.Path, true)
 
-		b.WriteString("\n响应参数：\n")
-		b.WriteString("\n| **参数** | **描述** | **类型** | **说明** |\n")
-		b.WriteString("|----------|----------|----------|----------|\n")
-
 		if resp, ok := pi.Responses[200]; ok {
 			var ref string
 			if resp.Schema != nil && len(resp.Schema.AllOf) > 1 {
@@ -209,11 +230,18 @@ func (p *Parser) buildResponses(b *strings.Builder, pi *types.PathInfo) {
 			} else if resp.Schema != nil && resp.Schema.Ref != "" {
 				ref, _ = getRefAndIsArray(resp.Schema)
 				eb.SetNeedWrap(false)
-			} else if resp.Schema != nil && resp.Schema.Type == types.SchemaTypeFile {
-				b.WriteString(fmt.Sprintf(respFormat, resp.Schema.Type, "文件", resp.Schema.Type, resp.Description))
 			}
 
 			if ref != "" {
+				b.WriteString(fmt.Sprintf("\n---\n\nContent-Type: %s\n", pi.Produce))
+				b.WriteString("\n响应参数：\n")
+				b.WriteString("\n| **参数** | **描述** | **类型** | **说明** |\n")
+				b.WriteString("|----------|----------|----------|----------|\n")
+
+				if resp.Schema != nil && resp.Schema.Type == types.SchemaTypeFile {
+					b.WriteString(fmt.Sprintf(respFormat, resp.Schema.Type, "文件", resp.Schema.Type, resp.Description))
+				}
+
 				dk := strings.TrimPrefix(ref, schemaReferPrefix)
 				if d, ok := p.swagger.Definitions[dk]; ok && d.Type == types.SchemaTypeObject {
 					ps := types.NewPropertySorter(d.Properties)
@@ -325,10 +353,14 @@ func ParsePathInfos(paths map[string]map[string]*types.Operation) []*types.PathI
 
 			if len(operation.Consumes) > 0 {
 				pi.Consume = strings.TrimSpace(operation.Consumes[0])
+			} else {
+				pi.Consume = types.ApplicationJSON
 			}
 
 			if len(operation.Produces) > 0 {
 				pi.Produce = strings.TrimSpace(operation.Produces[0])
+			} else {
+				pi.Produce = types.ApplicationJSON
 			}
 
 			pathInfos = append(pathInfos, pi)
@@ -404,7 +436,7 @@ func convertDescription(d string, flag bool) string {
 		left, right = d[:start], d[start+3:end]
 	}
 	if flag {
-		return left
+		return strings.TrimSpace(left)
 	}
-	return right
+	return strings.TrimSpace(right)
 }

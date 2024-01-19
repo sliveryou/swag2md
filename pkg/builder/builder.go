@@ -68,7 +68,7 @@ func (eb *ExampleBuilder) String() string {
 		}
 
 		if eb.needWrap {
-			s = fmt.Sprintf("{\"code\":200,\"msg\":\"OK\",\"data\":%s}", s)
+			s = fmt.Sprintf("{\"trace_id\":\"a1b2c3d4e5f6g7h8\",\"code\":0,\"msg\":\"ok\",\"data\":%s}", s)
 		}
 
 		out := &bytes.Buffer{}
