@@ -8,43 +8,43 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/sliveryou/go-tool/slicex"
-
 	"github.com/sliveryou/swag2md/pkg/builder"
 	"github.com/sliveryou/swag2md/types"
 )
 
 const (
-	methodGet         = "GET"
-	schemaReferPrefix = "#/definitions/"
-	propertyNameData  = "data"
-	paramRequired     = "必填"
-	paramNotRequired  = "非必填"
-	reqFormat         = "| %s | %s | %s | %s | %s | %s |\n"
-	respFormat        = "| %s | %s | %s | %s |\n"
-	emsp              = "&emsp;"
+	methodGet            = "GET"
+	schemaReferPrefix    = "#/definitions/"
+	propertyNameData     = "data"
+	paramRequired        = "必填"
+	paramNotRequired     = "非必填"
+	reqFormat            = "| %s | %s | %s | %s | %s | %s |\n"
+	respFormat           = "| %s | %s | %s | %s |\n"
+	emsp                 = "&emsp;"
+	casbinRuleAllow      = "allow" // 决策规则：允许
+	casbinRuleDeny       = "deny"  // 决策规则：拒绝
+	casbinPolicy         = "p, %s, %s, %s, %s\n"
+	casbinWithDenyPolicy = "p, %s, %s, %s, %s, %s\n"
 )
 
-var (
-	replacer = strings.NewReplacer(
-		" ", "-",
-		".", "",
-		"。", "",
-		",", "-",
-		"，", "-",
-		"/", "",
-		"(", "-",
-		")", "",
-		"[", "-",
-		"]", "",
-		"{", "-",
-		"}", "",
-		"（", "-",
-		"）", "",
-		"、", "-",
-		";", "-",
-		"；", "-",
-	)
+var replacer = strings.NewReplacer(
+	" ", "-",
+	".", "",
+	"。", "",
+	",", "-",
+	"，", "-",
+	"/", "",
+	"(", "-",
+	")", "",
+	"[", "-",
+	"]", "",
+	"{", "-",
+	"}", "",
+	"（", "-",
+	"）", "",
+	"、", "-",
+	";", "-",
+	"；", "-",
 )
 
 // Parser Swagger解析器详情
@@ -147,6 +147,27 @@ func (p *Parser) BuildDetail() string {
 	return b.String()
 }
 
+// BuildCasbinPolicy 构建casbin规则
+func (p *Parser) BuildCasbinPolicy(sub string, needDeny bool) string {
+	b := &strings.Builder{}
+
+	for _, key := range p.keys {
+		if pathInfos, ok := p.pathGroup[key]; ok {
+			for _, pi := range pathInfos {
+				// rbac with deny policy
+				// https://github.com/casbin/casbin/blob/master/examples/rbac_with_deny_policy.csv
+				if needDeny {
+					b.WriteString(fmt.Sprintf(casbinWithDenyPolicy, sub, pi.Path, pi.Method, casbinRuleAllow, pi.Summary))
+				} else {
+					b.WriteString(fmt.Sprintf(casbinPolicy, sub, pi.Path, pi.Method, pi.Summary))
+				}
+			}
+		}
+	}
+
+	return b.String()
+}
+
 // buildParameters 构建请求参数
 func (p *Parser) buildParameters(b *strings.Builder, pi *types.PathInfo) {
 	if len(pi.Parameters) > 0 {
@@ -184,7 +205,7 @@ func (p *Parser) buildParameters(b *strings.Builder, pi *types.PathInfo) {
 
 				if d, ok := p.swagger.Definitions[dk]; ok && d.Type == types.SchemaTypeObject {
 					ps := types.NewPropertySorter(d.Properties)
-					rm := slicex.CountString(d.Required)
+					rm := toMap(d.Required)
 					for _, property := range ps {
 						limit := paramNotRequired
 						if _, ok := rm[property.Name]; ok {
@@ -288,7 +309,7 @@ func (p *Parser) buildProperty(b *strings.Builder, pty *types.Property, paramIn,
 
 		if d, ok := p.swagger.Definitions[dk]; ok && d.Type == types.SchemaTypeObject {
 			ps := types.NewPropertySorter(d.Properties)
-			rm := slicex.CountString(d.Required)
+			rm := toMap(d.Required)
 
 			for _, property := range ps {
 				prefix := strings.Repeat(emsp, depth) + " "
@@ -435,8 +456,19 @@ func convertDescription(d string, flag bool) string {
 	if start != -1 && end != -1 {
 		left, right = d[:start], d[start+3:end]
 	}
+
 	if flag {
 		return strings.TrimSpace(left)
 	}
 	return strings.TrimSpace(right)
+}
+
+// toMap slice转换map
+func toMap(slice []string) map[string]struct{} {
+	result := make(map[string]struct{}, len(slice))
+	for _, v := range slice {
+		result[v] = struct{}{}
+	}
+
+	return result
 }
