@@ -19,16 +19,30 @@ type ExampleBuilder struct {
 	form     string
 	header   string
 	json     string
+	wrap     string
 }
 
 // NewExampleBuilder 新建示例构建器
 func NewExampleBuilder(path string, needWrap bool) *ExampleBuilder {
-	return &ExampleBuilder{path: path, needWrap: needWrap, query: make(url.Values)}
+	return &ExampleBuilder{
+		path:     path,
+		needWrap: needWrap,
+		query:    make(url.Values),
+		// 默认包装字符串
+		wrap: "{\"trace_id\":\"a1b2c3d4e5f6g7h8\",\"code\":0,\"msg\":\"ok\",\"data\":%s}",
+	}
 }
 
 // SetNeedWrap 设置是否需要封装响应
 func (eb *ExampleBuilder) SetNeedWrap(needWrap bool) {
 	eb.needWrap = needWrap
+}
+
+// SetWrap 设置封装响应
+func (eb *ExampleBuilder) SetWrap(wrap string) {
+	if wrap != "" && strings.Contains(wrap, "%s") {
+		eb.wrap = wrap
+	}
 }
 
 // SetIsArray 设置参数是否为数组
@@ -68,7 +82,7 @@ func (eb *ExampleBuilder) String() string {
 		}
 
 		if eb.needWrap {
-			s = fmt.Sprintf("{\"trace_id\":\"a1b2c3d4e5f6g7h8\",\"code\":0,\"msg\":\"ok\",\"data\":%s}", s)
+			s = fmt.Sprintf(eb.wrap, s)
 		}
 
 		out := &bytes.Buffer{}
@@ -101,7 +115,7 @@ func (eb *ExampleBuilder) AddJSON(k string, v interface{}, t string) {
 	if v != nil {
 		e = v
 	} else {
-		e = getInterfaceValue(k, t)
+		e = GetInterfaceValue(k, t)
 	}
 	example, _ := json.Marshal(e)
 	eb.json += fmt.Sprintf("%q:%s,", k, string(example))
@@ -144,8 +158,8 @@ func GetArrayString(k string, v interface{}, t string) string {
 	}
 }
 
-// getInterfaceValue 获取interface{}类型的示例值
-func getInterfaceValue(k, t string) interface{} {
+// GetInterfaceValue 获取interface{}类型的示例值
+func GetInterfaceValue(k, t string) interface{} {
 	var v interface{}
 
 	switch t {

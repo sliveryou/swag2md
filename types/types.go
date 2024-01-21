@@ -42,13 +42,34 @@ func (ps PropertySorter) Less(i, j int) bool {
 }
 
 // NewPropertySorter 新建属性字段排序器
-func NewPropertySorter(m map[string]*Schema) PropertySorter {
+func NewPropertySorter(m map[string]*Schema, needFill ...bool) PropertySorter {
 	var ps PropertySorter
+	nf := false
+	if len(needFill) > 0 {
+		nf = needFill[0]
+	}
 
 	for name, schema := range m {
+		if nf {
+			fillSchema(name, schema)
+		}
 		ps = append(ps, &Property{Name: name, Schema: schema})
 	}
 	sort.Sort(ps)
 
 	return ps
+}
+
+// fillSchema 填充概要信息
+func fillSchema(name string, schema *Schema) {
+	switch {
+	case name == "trace_id" && schema.XOrder == "":
+		schema.XOrder = "000"
+	case name == "code" && schema.XOrder == "":
+		schema.XOrder = "001"
+	case name == "msg" && schema.XOrder == "":
+		schema.XOrder = "002"
+	case name == "data" && schema.XOrder == "":
+		schema.XOrder = "003"
+	}
 }

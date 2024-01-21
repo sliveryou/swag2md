@@ -247,6 +247,7 @@ func (p *Parser) buildResponses(b *strings.Builder, pi *types.PathInfo) {
 			if resp.Schema != nil && len(resp.Schema.AllOf) > 1 {
 				if data, ok := resp.Schema.AllOf[1].Properties[propertyNameData]; ok {
 					ref, _ = getRefAndIsArray(data)
+					eb.SetWrap(p.getWrap(resp.Schema.AllOf[0]))
 				}
 			} else if resp.Schema != nil && resp.Schema.Ref != "" {
 				ref, _ = getRefAndIsArray(resp.Schema)
@@ -345,6 +346,35 @@ func (p *Parser) buildProperty(b *strings.Builder, pty *types.Property, paramIn,
 			return fmt.Sprintf("[%s]", jsonString)
 		}
 		return jsonString
+	}
+
+	return ""
+}
+
+// getWrap 获取包装字符串
+func (p *Parser) getWrap(s *types.Schema) string {
+	if s.Ref != "" {
+		dk := strings.TrimPrefix(s.Ref, schemaReferPrefix)
+		if d, ok := p.swagger.Definitions[dk]; ok && d.Type == types.SchemaTypeObject {
+			b := &strings.Builder{}
+			ps := types.NewPropertySorter(d.Properties, true)
+
+			for _, property := range ps {
+				if property.Name == propertyNameData {
+					b.WriteString(fmt.Sprintf("%q:%%s,", property.Name))
+				} else {
+					e := builder.GetInterfaceValue(property.Name, property.Schema.Type)
+					if property.Schema.Example != nil {
+						e = property.Schema.Example
+					}
+					example, _ := json.Marshal(e)
+
+					b.WriteString(fmt.Sprintf("%q:%s,", property.Name, example))
+				}
+			}
+
+			return fmt.Sprintf("{%s}", strings.TrimRight(b.String(), ","))
+		}
 	}
 
 	return ""
