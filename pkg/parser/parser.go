@@ -2,11 +2,12 @@ package parser
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"os"
 	"sort"
 	"strings"
+
+	"github.com/pkg/errors"
 
 	"github.com/sliveryou/swag2md/pkg/builder"
 	"github.com/sliveryou/swag2md/types"
@@ -14,6 +15,7 @@ import (
 
 const (
 	methodGet            = "GET"
+	responseSuccess      = 200
 	schemaReferPrefix    = "#/definitions/"
 	propertyNameData     = "data"
 	paramRequired        = "必填"
@@ -63,13 +65,13 @@ func NewParser(filePath string) (*Parser, error) {
 
 	content, err := os.ReadFile(filePath)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithMessage(err, "os.ReadFile err")
 	}
 
 	swagger := &types.Swagger{}
 	err = json.Unmarshal(content, swagger)
 	if err != nil {
-		return nil, err
+		return nil, errors.WithMessage(err, "json.Unmarshal err")
 	}
 
 	pathInfos := ParsePathInfos(swagger.Paths)
@@ -242,7 +244,7 @@ func (p *Parser) buildResponses(b *strings.Builder, pi *types.PathInfo) {
 	if len(pi.Responses) > 0 {
 		eb := builder.NewExampleBuilder(pi.Path, true)
 
-		if resp, ok := pi.Responses[200]; ok {
+		if resp, ok := pi.Responses[responseSuccess]; ok {
 			var ref string
 			if resp.Schema != nil && len(resp.Schema.AllOf) > 1 {
 				if data, ok := resp.Schema.AllOf[1].Properties[propertyNameData]; ok {

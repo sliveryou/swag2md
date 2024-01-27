@@ -43,12 +43,12 @@ func (ps PropertySorter) Less(i, j int) bool {
 
 // NewPropertySorter 新建属性字段排序器
 func NewPropertySorter(m map[string]*Schema, needFill ...bool) PropertySorter {
-	var ps PropertySorter
 	nf := false
 	if len(needFill) > 0 {
 		nf = needFill[0]
 	}
 
+	ps := make(PropertySorter, 0, len(m))
 	for name, schema := range m {
 		if nf {
 			fillSchema(name, schema)

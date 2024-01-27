@@ -16,6 +16,8 @@ import (
 const (
 	// codeFailure 失败错误码
 	codeFailure = 1
+	// writeFilePerm 写入文件默认权限
+	writeFilePerm = 0o666
 	// buildVersion swag2md版本
 	buildVersion = "1.0.1"
 )
@@ -46,26 +48,19 @@ func init() {
 	rootCmd.PersistentFlags().StringVarP(&swaggerFile, "swagger", "s", "swagger.json", "the swagger.json file")
 }
 
-func rootFunc(_ *cobra.Command, args []string) error {
+func rootFunc(_ *cobra.Command, _ []string) error {
 	p, err := parser.NewParser(swaggerFile)
 	if err != nil {
 		return errors.WithMessage(err, "parser.NewParser err")
 	}
-
-	f, err := os.Create(outputFile)
-	if err != nil {
-		return errors.WithMessage(err, "os.Create err")
-	}
-	defer f.Close()
 
 	out, err := markdown.Process("", []byte(p.Build(title)), nil)
 	if err != nil {
 		return errors.WithMessage(err, "markdown.Process err")
 	}
 
-	_, err = f.Write(out)
-	if err != nil {
-		return errors.WithMessage(err, "outputFile.Write err")
+	if err := os.WriteFile(outputFile, out, writeFilePerm); err != nil {
+		return errors.WithMessage(err, "os.WriteFile err")
 	}
 
 	return nil

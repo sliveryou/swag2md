@@ -33,21 +33,14 @@ func init() {
 	rootCmd.AddCommand(casbinCmd)
 }
 
-func casbinFunc(_ *cobra.Command, args []string) error {
+func casbinFunc(_ *cobra.Command, _ []string) error {
 	p, err := parser.NewParser(swaggerFile)
 	if err != nil {
 		return errors.WithMessage(err, "parser.NewParser err")
 	}
 
-	f, err := os.Create(outputCsv)
-	if err != nil {
-		return errors.WithMessage(err, "os.Create err")
-	}
-	defer f.Close()
-
-	_, err = f.Write([]byte(p.BuildCasbinPolicy(subjectName, needDeny)))
-	if err != nil {
-		return errors.WithMessage(err, "outputFile.Write err")
+	if err := os.WriteFile(outputCsv, []byte(p.BuildCasbinPolicy(subjectName, needDeny)), writeFilePerm); err != nil {
+		return errors.WithMessage(err, "os.WriteFile err")
 	}
 
 	return nil
