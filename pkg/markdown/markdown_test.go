@@ -77,5 +77,6 @@ Final paragraph.
 	output, err := Process("", input, nil)
 	assert.NoError(t, err)
 
+	assert.NotEqual(t, input, output)
 	os.Stdout.Write(output)
 }

@@ -4,24 +4,72 @@ import (
 	"os"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+
+	"github.com/sliveryou/swag2md/pkg/markdown"
 )
 
-func TestParser(t *testing.T) {
-	filePath := "../../testdata/swagger.json"
+const (
+	writeFilePerm = 0o666
+)
+
+func TestNewParser(t *testing.T) {
+	_, err := NewParser("")
+	require.EqualError(t, err, "illegal parser configure")
+
+	_, err = NewParser("not/exist/swagger/file")
+	require.EqualError(t, err, "os.ReadFile err: open not/exist/swagger/file: no such file or directory")
+
+	_, err = NewParser("parser.go")
+	require.EqualError(t, err, "json.Unmarshal err: invalid character 'p' looking for beginning of value")
+
+	p, err := NewParser("../../examples/swagger.json")
+	require.NoError(t, err)
+	assert.NotNil(t, p)
+}
+
+func TestParser_Build(t *testing.T) {
+	title := "示例接口文档"
+	filePath := "../../examples/swagger.json"
 	p, err := NewParser(filePath)
 	require.NoError(t, err)
-	t.Logf("%+v", p)
-	t.Logf(p.BuildTitle("接口文档"))
-	t.Logf(p.BuildOverview())
-	t.Logf(p.BuildDetail())
 
-	outPath := "../../testdata/api.md"
-	f, err := os.Create(outPath)
+	doc := p.Build(title)
+	t.Log(doc)
+
+	outPath := "../../examples/swagger.md"
+	out, err := markdown.Process("", []byte(doc), nil)
 	require.NoError(t, err)
-	defer f.Close()
 
-	_, _ = f.WriteString(p.BuildTitle("接口文档"))
-	_, _ = f.WriteString(p.BuildOverview())
-	_, _ = f.WriteString(p.BuildDetail())
+	err = os.WriteFile(outPath, out, writeFilePerm)
+	require.NoError(t, err)
+}
+
+func TestParser_BuildCasbinPolicy(t *testing.T) {
+	sub := "ADMIN"
+	filePath := "../../examples/swagger.json"
+	p, err := NewParser(filePath)
+	require.NoError(t, err)
+
+	policy := p.BuildCasbinPolicy(sub, false)
+	t.Log(policy)
+
+	outPath := "../../examples/policy.csv"
+	err = os.WriteFile(outPath, []byte(policy), writeFilePerm)
+	require.NoError(t, err)
+}
+
+func TestParser_BuildCasbinPolicyDeny(t *testing.T) {
+	sub := "ADMIN"
+	filePath := "../../examples/swagger.json"
+	p, err := NewParser(filePath)
+	require.NoError(t, err)
+
+	policy := p.BuildCasbinPolicy(sub, true)
+	t.Log(policy)
+
+	outPath := "../../examples/policy-deny.csv"
+	err = os.WriteFile(outPath, []byte(policy), writeFilePerm)
+	require.NoError(t, err)
 }

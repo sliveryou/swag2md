@@ -1,0 +1,15 @@
+p, ADMIN, /api/department, GET, allow, 查询部门分页
+p, ADMIN, /api/department, POST, allow, 创建部门
+p, ADMIN, /api/department/{id}, GET, allow, 查询部门
+p, ADMIN, /api/department/{id}, PUT, allow, 更新部门
+p, ADMIN, /api/department/{id}, DELETE, allow, 删除部门
+p, ADMIN, /api/job, GET, allow, 查询岗位分页
+p, ADMIN, /api/job, POST, allow, 创建岗位
+p, ADMIN, /api/job/{id}, GET, allow, 查询岗位
+p, ADMIN, /api/job/{id}, PUT, allow, 更新岗位
+p, ADMIN, /api/job/{id}, DELETE, allow, 删除岗位
+p, ADMIN, /api/personnel, GET, allow, 查询人员分页
+p, ADMIN, /api/personnel, POST, allow, 创建人员
+p, ADMIN, /api/personnel/{id}, GET, allow, 查询人员
+p, ADMIN, /api/personnel/{id}, PUT, allow, 更新人员
+p, ADMIN, /api/personnel/{id}, DELETE, allow, 删除人员

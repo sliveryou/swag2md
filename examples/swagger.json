@@ -1,0 +1,1565 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "example restful api",
+    "description": "example restful api for swag2md",
+    "version": "v1.0.0"
+  },
+  "host": "127.0.0.1:8080",
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/department": {
+      "get": {
+        "summary": "查询部门分页",
+        "operationId": "GetDepartmentPages",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/Response"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/GetDepartmentPagesResp"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "name",
+            "description": "部门名称",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "description",
+            "description": "部门描述",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "description": "页数",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "page_size",
+            "description": "每条页数",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "example/department"
+        ]
+      },
+      "post": {
+        "summary": "创建部门",
+        "operationId": "CreateDepartment",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/Response"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/CreateDepartmentResp"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "CreateDepartmentReq 创建部门请求",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateDepartmentReq"
+            }
+          }
+        ],
+        "tags": [
+          "example/department"
+        ]
+      }
+    },
+    "/api/department/{id}": {
+      "get": {
+        "summary": "查询部门",
+        "operationId": "GetDepartment",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/Response"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/GetDepartmentResp"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "部门ID",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "example/department"
+        ]
+      },
+      "delete": {
+        "summary": "删除部门",
+        "operationId": "DeleteDepartment",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/Response"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/DeleteDepartmentResp"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "部门ID",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "example/department"
+        ]
+      },
+      "put": {
+        "summary": "更新部门",
+        "operationId": "UpdateDepartment",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/Response"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/UpdateDepartmentResp"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "部门ID",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "description": "UpdateDepartmentReq 更新部门请求",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateDepartmentReq"
+            }
+          }
+        ],
+        "tags": [
+          "example/department"
+        ]
+      }
+    },
+    "/api/job": {
+      "get": {
+        "summary": "查询岗位分页",
+        "operationId": "GetJobPages",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/Response"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/GetJobPagesResp"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "name",
+            "description": "岗位名称",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "department_id",
+            "description": "部门ID",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "page",
+            "description": "页数",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "page_size",
+            "description": "每条页数",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "example/job"
+        ]
+      },
+      "post": {
+        "summary": "创建岗位",
+        "operationId": "CreateJob",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/Response"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/CreateJobResp"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "CreateJobReq 创建岗位请求",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateJobReq"
+            }
+          }
+        ],
+        "tags": [
+          "example/job"
+        ]
+      }
+    },
+    "/api/job/{id}": {
+      "get": {
+        "summary": "查询岗位",
+        "operationId": "GetJob",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/Response"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/GetJobResp"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "岗位ID",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "example/job"
+        ]
+      },
+      "delete": {
+        "summary": "删除岗位",
+        "operationId": "DeleteJob",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/Response"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/DeleteJobResp"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "岗位ID",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "example/job"
+        ]
+      },
+      "put": {
+        "summary": "更新岗位",
+        "operationId": "UpdateJob",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/Response"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/UpdateJobResp"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "岗位ID",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "description": "UpdateJobReq 更新岗位请求",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateJobReq"
+            }
+          }
+        ],
+        "tags": [
+          "example/job"
+        ]
+      }
+    },
+    "/api/personnel": {
+      "get": {
+        "summary": "查询人员分页",
+        "operationId": "GetPersonnelPages",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/Response"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/GetPersonnelPagesResp"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "name",
+            "description": "人员名称",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "phone",
+            "description": "联系电话",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "status",
+            "description": "在岗情况（0-离岗 1-在岗）",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "enum": [
+              "0",
+              "1"
+            ]
+          },
+          {
+            "name": "review_status",
+            "description": "审查情况（0-未审查 1-已审查）",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32",
+            "enum": [
+              "0",
+              "1"
+            ]
+          },
+          {
+            "name": "description",
+            "description": "人员备注",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "department_id",
+            "description": "部门ID",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "job_id",
+            "description": "岗位ID",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "page",
+            "description": "页数",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "page_size",
+            "description": "每条页数",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "example/personnel"
+        ]
+      },
+      "post": {
+        "summary": "创建人员",
+        "operationId": "CreatePersonnel",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/Response"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/CreatePersonnelResp"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": "CreatePersonnelReq 创建人员请求",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreatePersonnelReq"
+            }
+          }
+        ],
+        "tags": [
+          "example/personnel"
+        ]
+      }
+    },
+    "/api/personnel/{id}": {
+      "get": {
+        "summary": "查询人员",
+        "operationId": "GetPersonnel",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/Response"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/GetPersonnelResp"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "人员ID",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "example/personnel"
+        ]
+      },
+      "delete": {
+        "summary": "删除人员",
+        "operationId": "DeletePersonnel",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/Response"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/DeletePersonnelResp"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "人员ID",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "example/personnel"
+        ]
+      },
+      "put": {
+        "summary": "更新人员",
+        "operationId": "UpdatePersonnel",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/Response"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/definitions/UpdatePersonnelResp"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "人员ID",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "body",
+            "description": "UpdatePersonnelReq 更新人员请求",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdatePersonnelReq"
+            }
+          }
+        ],
+        "tags": [
+          "example/personnel"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "CreateDepartmentReq": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "部门名称"
+        },
+        "description": {
+          "type": "string",
+          "description": "部门描述"
+        }
+      },
+      "title": "CreateDepartmentReq",
+      "required": [
+        "name"
+      ]
+    },
+    "CreateDepartmentResp": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "部门ID"
+        },
+        "name": {
+          "type": "string",
+          "description": "部门名称"
+        },
+        "description": {
+          "type": "string",
+          "description": "部门描述"
+        }
+      },
+      "title": "CreateDepartmentResp"
+    },
+    "CreateJobReq": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "岗位名称"
+        },
+        "department_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "部门ID"
+        }
+      },
+      "title": "CreateJobReq",
+      "required": [
+        "name",
+        "department_id"
+      ]
+    },
+    "CreateJobResp": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "岗位ID"
+        },
+        "name": {
+          "type": "string",
+          "description": "岗位名称"
+        },
+        "department_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "部门ID"
+        }
+      },
+      "title": "CreateJobResp"
+    },
+    "CreatePersonnelReq": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "人员名称"
+        },
+        "phone": {
+          "type": "string",
+          "description": "联系电话"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int32",
+          "enum": [
+            "0",
+            "1"
+          ],
+          "description": "在岗情况（0-离岗 1-在岗）"
+        },
+        "review_status": {
+          "type": "integer",
+          "format": "int32",
+          "enum": [
+            "0",
+            "1"
+          ],
+          "description": "审查情况（0-未审查 1-已审查）"
+        },
+        "description": {
+          "type": "string",
+          "description": "人员备注"
+        },
+        "department_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "部门ID"
+        },
+        "job_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "岗位ID"
+        }
+      },
+      "title": "CreatePersonnelReq",
+      "required": [
+        "name",
+        "status",
+        "review_status",
+        "department_id",
+        "job_id"
+      ]
+    },
+    "CreatePersonnelResp": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "人员ID"
+        },
+        "name": {
+          "type": "string",
+          "description": "人员名称"
+        },
+        "phone": {
+          "type": "string",
+          "description": "联系电话"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int32",
+          "description": "在岗情况（0-离岗 1-在岗）"
+        },
+        "review_status": {
+          "type": "integer",
+          "format": "int32",
+          "description": "审查情况（0-未审查 1-已审查）"
+        },
+        "description": {
+          "type": "string",
+          "description": "人员备注"
+        },
+        "department_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "部门ID"
+        },
+        "job_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "岗位ID"
+        }
+      },
+      "title": "CreatePersonnelResp"
+    },
+    "DeleteDepartmentReq": {
+      "type": "object",
+      "properties": {},
+      "title": "DeleteDepartmentReq"
+    },
+    "DeleteDepartmentResp": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "部门ID"
+        }
+      },
+      "title": "DeleteDepartmentResp",
+      "required": [
+        "id"
+      ]
+    },
+    "DeleteJobReq": {
+      "type": "object",
+      "properties": {},
+      "title": "DeleteJobReq"
+    },
+    "DeleteJobResp": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "岗位ID"
+        }
+      },
+      "title": "DeleteJobResp",
+      "required": [
+        "id"
+      ]
+    },
+    "DeletePersonnelReq": {
+      "type": "object",
+      "properties": {},
+      "title": "DeletePersonnelReq"
+    },
+    "DeletePersonnelResp": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "人员ID"
+        }
+      },
+      "title": "DeletePersonnelResp",
+      "required": [
+        "id"
+      ]
+    },
+    "Department": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "部门ID"
+        },
+        "name": {
+          "type": "string",
+          "description": "部门名称"
+        },
+        "description": {
+          "type": "string",
+          "description": "部门描述"
+        }
+      },
+      "title": "Department",
+      "required": [
+        "id",
+        "name",
+        "description"
+      ]
+    },
+    "GetDepartmentPagesReq": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "部门名称"
+        },
+        "description": {
+          "type": "string",
+          "description": "部门描述"
+        },
+        "page": {
+          "type": "integer",
+          "format": "int64",
+          "description": "页数"
+        },
+        "page_size": {
+          "type": "integer",
+          "format": "int64",
+          "description": "每条页数"
+        }
+      },
+      "title": "GetDepartmentPagesReq",
+      "required": [
+        "page",
+        "page_size"
+      ]
+    },
+    "GetDepartmentPagesResp": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer",
+          "format": "int64",
+          "description": "总数"
+        },
+        "page_count": {
+          "type": "integer",
+          "format": "int64",
+          "description": "页数"
+        },
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Department"
+          },
+          "description": "结果"
+        }
+      },
+      "title": "GetDepartmentPagesResp",
+      "required": [
+        "count",
+        "page_count",
+        "results"
+      ]
+    },
+    "GetDepartmentReq": {
+      "type": "object",
+      "properties": {},
+      "title": "GetDepartmentReq"
+    },
+    "GetDepartmentResp": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "部门ID"
+        },
+        "name": {
+          "type": "string",
+          "description": "部门名称"
+        },
+        "description": {
+          "type": "string",
+          "description": "部门描述"
+        }
+      },
+      "title": "GetDepartmentResp"
+    },
+    "GetJobPagesReq": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "岗位名称"
+        },
+        "department_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "部门ID"
+        },
+        "page": {
+          "type": "integer",
+          "format": "int64",
+          "description": "页数"
+        },
+        "page_size": {
+          "type": "integer",
+          "format": "int64",
+          "description": "每条页数"
+        }
+      },
+      "title": "GetJobPagesReq",
+      "required": [
+        "page",
+        "page_size"
+      ]
+    },
+    "GetJobPagesResp": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer",
+          "format": "int64",
+          "description": "总数"
+        },
+        "page_count": {
+          "type": "integer",
+          "format": "int64",
+          "description": "页数"
+        },
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Job"
+          },
+          "description": "结果"
+        }
+      },
+      "title": "GetJobPagesResp",
+      "required": [
+        "count",
+        "page_count",
+        "results"
+      ]
+    },
+    "GetJobReq": {
+      "type": "object",
+      "properties": {},
+      "title": "GetJobReq"
+    },
+    "GetJobResp": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "岗位ID"
+        },
+        "name": {
+          "type": "string",
+          "description": "岗位名称"
+        },
+        "department_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "部门ID"
+        }
+      },
+      "title": "GetJobResp"
+    },
+    "GetPersonnelPagesReq": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "人员名称"
+        },
+        "phone": {
+          "type": "string",
+          "description": "联系电话"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int32",
+          "enum": [
+            "0",
+            "1"
+          ],
+          "description": "在岗情况（0-离岗 1-在岗）"
+        },
+        "review_status": {
+          "type": "integer",
+          "format": "int32",
+          "enum": [
+            "0",
+            "1"
+          ],
+          "description": "审查情况（0-未审查 1-已审查）"
+        },
+        "description": {
+          "type": "string",
+          "description": "人员备注"
+        },
+        "department_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "部门ID"
+        },
+        "job_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "岗位ID"
+        },
+        "page": {
+          "type": "integer",
+          "format": "int64",
+          "description": "页数"
+        },
+        "page_size": {
+          "type": "integer",
+          "format": "int64",
+          "description": "每条页数"
+        }
+      },
+      "title": "GetPersonnelPagesReq",
+      "required": [
+        "page",
+        "page_size"
+      ]
+    },
+    "GetPersonnelPagesResp": {
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "integer",
+          "format": "int64",
+          "description": "总数"
+        },
+        "page_count": {
+          "type": "integer",
+          "format": "int64",
+          "description": "页数"
+        },
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Personnel"
+          },
+          "description": "结果"
+        }
+      },
+      "title": "GetPersonnelPagesResp",
+      "required": [
+        "count",
+        "page_count",
+        "results"
+      ]
+    },
+    "GetPersonnelReq": {
+      "type": "object",
+      "properties": {},
+      "title": "GetPersonnelReq"
+    },
+    "GetPersonnelResp": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "人员ID"
+        },
+        "name": {
+          "type": "string",
+          "description": "人员名称"
+        },
+        "phone": {
+          "type": "string",
+          "description": "联系电话"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int32",
+          "description": "在岗情况（0-离岗 1-在岗）"
+        },
+        "review_status": {
+          "type": "integer",
+          "format": "int32",
+          "description": "审查情况（0-未审查 1-已审查）"
+        },
+        "description": {
+          "type": "string",
+          "description": "人员备注"
+        },
+        "department_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "部门ID"
+        },
+        "job_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "岗位ID"
+        }
+      },
+      "title": "GetPersonnelResp"
+    },
+    "Job": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "岗位ID"
+        },
+        "name": {
+          "type": "string",
+          "description": "岗位名称"
+        },
+        "department_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "部门ID"
+        }
+      },
+      "title": "Job",
+      "required": [
+        "id",
+        "name",
+        "department_id"
+      ]
+    },
+    "Personnel": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "人员ID"
+        },
+        "name": {
+          "type": "string",
+          "description": "人员名称"
+        },
+        "phone": {
+          "type": "string",
+          "description": "联系电话"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int32",
+          "description": "在岗情况（0-离岗 1-在岗）"
+        },
+        "review_status": {
+          "type": "integer",
+          "format": "int32",
+          "description": "审查情况（0-未审查 1-已审查）"
+        },
+        "description": {
+          "type": "string",
+          "description": "人员备注"
+        },
+        "department_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "部门ID"
+        },
+        "job_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "岗位ID"
+        }
+      },
+      "title": "Personnel",
+      "required": [
+        "id",
+        "name",
+        "phone",
+        "status",
+        "review_status",
+        "description",
+        "department_id",
+        "job_id"
+      ]
+    },
+    "Response": {
+      "type": "object",
+      "properties": {
+        "trace_id": {
+          "type": "string",
+          "description": "链路追踪id",
+          "example": "a1b2c3d4e5f6g7h8"
+        },
+        "code": {
+          "type": "integer",
+          "description": "状态码",
+          "example": 0
+        },
+        "msg": {
+          "type": "string",
+          "description": "消息",
+          "example": "ok"
+        },
+        "data": {
+          "type": "object",
+          "description": "数据"
+        }
+      }
+    },
+    "UpdateDepartmentReq": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "部门名称"
+        },
+        "description": {
+          "type": "string",
+          "description": "部门描述"
+        }
+      },
+      "title": "UpdateDepartmentReq",
+      "required": [
+        "name"
+      ]
+    },
+    "UpdateDepartmentResp": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "部门ID"
+        },
+        "name": {
+          "type": "string",
+          "description": "部门名称"
+        },
+        "description": {
+          "type": "string",
+          "description": "部门描述"
+        }
+      },
+      "title": "UpdateDepartmentResp"
+    },
+    "UpdateJobReq": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "岗位名称"
+        },
+        "department_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "部门ID"
+        }
+      },
+      "title": "UpdateJobReq",
+      "required": [
+        "name",
+        "department_id"
+      ]
+    },
+    "UpdateJobResp": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "岗位ID"
+        },
+        "name": {
+          "type": "string",
+          "description": "岗位名称"
+        },
+        "department_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "部门ID"
+        }
+      },
+      "title": "UpdateJobResp"
+    },
+    "UpdatePersonnelReq": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "人员名称"
+        },
+        "phone": {
+          "type": "string",
+          "description": "联系电话"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int32",
+          "enum": [
+            "0",
+            "1"
+          ],
+          "description": "在岗情况（0-离岗 1-在岗）"
+        },
+        "review_status": {
+          "type": "integer",
+          "format": "int32",
+          "enum": [
+            "0",
+            "1"
+          ],
+          "description": "审查情况（0-未审查 1-已审查）"
+        },
+        "description": {
+          "type": "string",
+          "description": "人员备注"
+        },
+        "department_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "部门ID"
+        },
+        "job_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "岗位ID"
+        }
+      },
+      "title": "UpdatePersonnelReq",
+      "required": [
+        "name",
+        "status",
+        "review_status",
+        "department_id",
+        "job_id"
+      ]
+    },
+    "UpdatePersonnelResp": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "人员ID"
+        },
+        "name": {
+          "type": "string",
+          "description": "人员名称"
+        },
+        "phone": {
+          "type": "string",
+          "description": "联系电话"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int32",
+          "description": "在岗情况（0-离岗 1-在岗）"
+        },
+        "review_status": {
+          "type": "integer",
+          "format": "int32",
+          "description": "审查情况（0-未审查 1-已审查）"
+        },
+        "description": {
+          "type": "string",
+          "description": "人员备注"
+        },
+        "department_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "部门ID"
+        },
+        "job_id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "岗位ID"
+        }
+      },
+      "title": "UpdatePersonnelResp"
+    }
+  },
+  "securityDefinitions": {
+    "apiKey": {
+      "type": "apiKey",
+      "description": "Enter JWT Bearer token **_only_**",
+      "name": "Authorization",
+      "in": "header"
+    }
+  }
+}

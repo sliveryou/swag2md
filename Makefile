@@ -1,4 +1,4 @@
-.PHONY: porxy fmt lint markdown policy
+.PHONY: porxy fmt lint test markdown policy
 
 proxy:
 	@go env -w GO111MODULE="on"
@@ -11,6 +11,9 @@ fmt:
 
 lint:
 	@golangci-lint run ./...
+
+test:
+	@go test ./...
 
 markdown:
 	@swag2md -t "接口文档" -s swagger.json -o auto-gen-api.md

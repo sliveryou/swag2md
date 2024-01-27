@@ -68,6 +68,10 @@ $ swag2md casbin -h
   -s, --swagger string   待解析的 swagger.json 文件 (默认 "swagger.json")
 ```
 
+## 例子
+
+参考 [example](examples) 目录下基于 [swagger.json](examples/swagger.json) 由 [parser_test.go](pkg/parser/parser_test.go) 生成的文件
+
 **PS：**
 
 - swagger.json 文件可以参考使用 `swag init` 命令生成

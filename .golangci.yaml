@@ -7,12 +7,9 @@ run:
     - pkg/markdown
 
 linters-settings:
-  gosimple:
-    # https://staticcheck.io/docs/options#checks
-    checks: [ "all" ]
-  staticcheck:
-    # https://staticcheck.io/docs/options#checks
-    checks: [ "all" ]
+  errcheck:
+    # https://github.com/kisielk/errcheck#errcheck
+    ignore: fmt:.*,os:.*
   goconst:
     # https://github.com/jgautheron/goconst#usage
     ignore-tests: true
@@ -25,6 +22,9 @@ linters-settings:
   gofumpt:
     # https://github.com/mvdan/gofumpt#gofumpt
     extra-rules: true
+  gosimple:
+    # https://staticcheck.io/docs/options#checks
+    checks: [ "all" ]
   revive:
     ignore-generated-header: true
     severity: warning
@@ -44,7 +44,9 @@ linters-settings:
       - name: exported
       - name: if-return
       - name: increment-decrement
-      # - name: var-naming
+      - name: var-naming
+        arguments:
+          - [ "ID" ] # allow list
       - name: range
       - name: receiver-naming
       - name: indent-error-flow
@@ -98,6 +100,12 @@ linters-settings:
       - name: redundant-import-alias
       - name: import-alias-naming
       - name: enforce-map-style
+  ireturn:
+    # https://github.com/butuzov/ireturn#usage
+    allow: [ "anon", "error","empty", "stdlib", "generic" ]
+  staticcheck:
+    # https://staticcheck.io/docs/options#checks
+    checks: [ "all" ]
   stylecheck:
     # https://staticcheck.io/docs/options#checks
     checks: [ "all", "-ST1000", "-ST1003" ]
@@ -172,7 +180,6 @@ linters:
     - sqlclosecheck
     - staticcheck
     - stylecheck
-    - tagalign
     - tenv
     - testableexamples
     - testifylint
@@ -194,5 +201,6 @@ issues:
   max-same-issues: 0
   exclude-rules:
     - path: _test.go
+      test: "add-constant"
       linters:
-        - errcheck
+        - revive
