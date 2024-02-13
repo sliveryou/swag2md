@@ -58,7 +58,7 @@ func (eb *ExampleBuilder) String() string {
 		b.WriteString("\n```\n")
 
 		if eb.header != "" {
-			b.WriteString(fmt.Sprintf("Header:\n%s", eb.header))
+			b.WriteString("Header:\n" + eb.header)
 		}
 
 		if len(eb.query) > 0 {
@@ -66,7 +66,7 @@ func (eb *ExampleBuilder) String() string {
 		}
 
 		if eb.form != "" {
-			b.WriteString(fmt.Sprintf("Form Data:\n%s", eb.form))
+			b.WriteString("Form Data:\n" + eb.form)
 		}
 
 		b.WriteString("```\n")
@@ -88,7 +88,7 @@ func (eb *ExampleBuilder) String() string {
 		out := &bytes.Buffer{}
 		_ = json.Indent(out, []byte(s), "", "  ")
 
-		b.WriteString(fmt.Sprintf("%s\n```\n", out.String()))
+		b.WriteString(out.String() + "\n```\n")
 	}
 
 	return b.String()

@@ -1,8 +1,6 @@
 package types
 
-import (
-	"sort"
-)
+import "sort"
 
 // PathInfo 路径详情
 type PathInfo struct {

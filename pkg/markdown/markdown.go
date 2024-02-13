@@ -10,7 +10,8 @@ import (
 
 	runewidth "github.com/mattn/go-runewidth"
 	"github.com/russross/blackfriday"
-	"github.com/shurcooL/go/indentwriter"
+
+	"github.com/sliveryou/swag2md/pkg/markdown/indentwriter"
 )
 
 type markdownRenderer struct {

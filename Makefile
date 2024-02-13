@@ -1,8 +1,11 @@
-.PHONY: porxy fmt lint test markdown policy
+.PHONY: porxy tidy fmt lint test pre-commit markdown policy
 
 proxy:
 	@go env -w GO111MODULE="on"
 	@go env -w GOPROXY="https://goproxy.cn,direct"
+
+tidy:
+	@go mod tidy -e -v
 
 fmt:
 	@find . -name '*.go' | xargs gofumpt -w -extra
@@ -14,6 +17,8 @@ lint:
 
 test:
 	@go test ./...
+
+pre-commit: tidy fmt lint test
 
 markdown:
 	@swag2md -t "接口文档" -s swagger.json -o auto-gen-api.md
