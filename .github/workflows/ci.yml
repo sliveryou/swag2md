@@ -1,11 +1,16 @@
-name: ci
+name: CI
+
 on:
   push:
+    branches:
+      - 'main'
     paths:
       - 'go.mod'
       - '**.go'
       - '**.yml'
   pull_request:
+    branches:
+      - 'main'
     paths:
       - 'go.mod'
       - '**.go'

@@ -175,6 +175,7 @@ $RECYCLE.BIN/
 
 ### Project ###
 testdata/
+/swag2md
 /swagger.json
 /auto-gen-api.md
 /policy.csv
