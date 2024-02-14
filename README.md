@@ -1,6 +1,6 @@
 # swag2md
 
-[![Github License](https://img.shields.io/github/license/sliveryou/swag2md.svg?style=flat)](https://github.com/sliveryou/swag2md/blob/master/LICENSE)
+[![Github License](https://img.shields.io/github/license/sliveryou/swag2md.svg?style=flat)](https://github.com/sliveryou/swag2md/blob/main/LICENSE)
 [![Go Doc](https://godoc.org/github.com/sliveryou/swag2md?status.svg)](https://pkg.go.dev/github.com/sliveryou/swag2md)
 [![Go Report](https://goreportcard.com/badge/github.com/sliveryou/swag2md)](https://goreportcard.com/report/github.com/sliveryou/swag2md)
 [![Github Latest Release](https://img.shields.io/github/release/sliveryou/swag2md.svg?style=flat)](https://github.com/sliveryou/swag2md/releases/latest)
@@ -20,6 +20,8 @@ $ GO111MODULE=on go get -u github.com/sliveryou/swag2md@latest
 # 如果 go 版本在 1.16 及以后，使用如下命令安装：
 $ GO111MODULE=on go install github.com/sliveryou/swag2md@latest
 ```
+
+或者从 github 的 [release](https://github.com/sliveryou/swag2md/releases) 页面下载预编译好的二进制文件。
 
 ## swag2md 命令行接口
 
