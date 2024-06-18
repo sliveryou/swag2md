@@ -17,7 +17,6 @@ const (
 	methodGet            = "GET"
 	responseSuccess      = 200
 	schemaReferPrefix    = "#/definitions/"
-	propertyNameData     = "data"
 	paramRequired        = "必填"
 	paramNotRequired     = "非必填"
 	reqFormat            = "| %s | %s | %s | %s | %s | %s |\n"
@@ -247,9 +246,10 @@ func (p *Parser) buildResponses(b *strings.Builder, pi *types.PathInfo) {
 		if resp, ok := pi.Responses[responseSuccess]; ok {
 			var ref string
 			if resp.Schema != nil && len(resp.Schema.AllOf) > 1 {
-				if data, ok := resp.Schema.AllOf[1].Properties[propertyNameData]; ok {
+				for name, data := range resp.Schema.AllOf[1].Properties {
 					ref, _ = getRefAndIsArray(data)
-					eb.SetWrap(p.getWrap(resp.Schema.AllOf[0]))
+					eb.SetWrap(p.getWrap(resp.Schema.AllOf[0], name))
+					break
 				}
 			} else if resp.Schema != nil && resp.Schema.Ref != "" {
 				ref, _ = getRefAndIsArray(resp.Schema)
@@ -354,7 +354,7 @@ func (p *Parser) buildProperty(b *strings.Builder, pty *types.Property, paramIn,
 }
 
 // getWrap 获取包装字符串
-func (p *Parser) getWrap(s *types.Schema) string {
+func (p *Parser) getWrap(s *types.Schema, dataName string) string {
 	if s.Ref != "" {
 		dk := strings.TrimPrefix(s.Ref, schemaReferPrefix)
 		if d, ok := p.swagger.Definitions[dk]; ok && d.Type == types.SchemaTypeObject {
@@ -362,7 +362,7 @@ func (p *Parser) getWrap(s *types.Schema) string {
 			ps := types.NewPropertySorter(d.Properties, true)
 
 			for _, property := range ps {
-				if property.Name == propertyNameData {
+				if property.Name == dataName {
 					b.WriteString(fmt.Sprintf("%q:%%s,", property.Name))
 				} else {
 					e := builder.GetInterfaceValue(property.Name, property.Schema.Type)
