@@ -1,6 +1,10 @@
 package types
 
-import "sort"
+import (
+	"sort"
+
+	"github.com/iancoleman/strcase"
+)
 
 // PathInfo 路径详情
 type PathInfo struct {
@@ -60,14 +64,17 @@ func NewPropertySorter(m map[string]*Schema, needFill ...bool) PropertySorter {
 
 // fillSchema 填充概要信息
 func fillSchema(name string, schema *Schema) {
-	switch {
-	case name == "trace_id" && schema.XOrder == "":
-		schema.XOrder = "000"
-	case name == "code" && schema.XOrder == "":
-		schema.XOrder = "001"
-	case name == "msg" && schema.XOrder == "":
-		schema.XOrder = "002"
-	case name == "data" && schema.XOrder == "":
-		schema.XOrder = "003"
+	if schema.XOrder == "" {
+		name = strcase.ToSnake(name)
+		switch {
+		case name == "trace_id" || name == "request_id":
+			schema.XOrder = "000"
+		case name == "code":
+			schema.XOrder = "001"
+		case name == "msg" || name == "message":
+			schema.XOrder = "002"
+		case name == "data":
+			schema.XOrder = "003"
+		}
 	}
 }
