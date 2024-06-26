@@ -245,9 +245,10 @@ func (p *Parser) buildResponses(b *strings.Builder, pi *types.PathInfo) {
 
 		if resp, ok := pi.Responses[responseSuccess]; ok {
 			var ref string
+			var isArray bool
 			if resp.Schema != nil && len(resp.Schema.AllOf) > 1 {
 				for name, data := range resp.Schema.AllOf[1].Properties {
-					ref, _ = getRefAndIsArray(data)
+					ref, isArray = getRefAndIsArray(data)
 					eb.SetWrap(p.getWrap(resp.Schema.AllOf[0], name))
 					break
 				}
@@ -255,6 +256,7 @@ func (p *Parser) buildResponses(b *strings.Builder, pi *types.PathInfo) {
 				ref, _ = getRefAndIsArray(resp.Schema)
 				eb.SetNeedWrap(false)
 			}
+			eb.SetIsArray(isArray)
 
 			if ref != "" {
 				b.WriteString(fmt.Sprintf("\n---\n\nContent-Type: %s\n", pi.Produce))
